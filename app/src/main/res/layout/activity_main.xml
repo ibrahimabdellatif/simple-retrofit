@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:padding="8dp"
     tools:context=".MainActivity">
-   <!--this widget allowing scrolling in screen-->
+    <!--this widget allowing scrolling in screen-->
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"

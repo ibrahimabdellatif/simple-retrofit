@@ -2,8 +2,6 @@ package com.ibrahim.simpleretrofit;
 
 import android.widget.ImageView;
 
-import com.google.gson.annotations.SerializedName;
-
 public class Comments {
     private int postId;
     private int id;
@@ -11,7 +9,6 @@ public class Comments {
     private String email;
     private String body;
     ImageView img;
-
 
 
     public int getPostId() {
@@ -29,6 +26,7 @@ public class Comments {
     public String getEmail() {
         return email;
     }
+
     public String getBody() {
         return body;
     }

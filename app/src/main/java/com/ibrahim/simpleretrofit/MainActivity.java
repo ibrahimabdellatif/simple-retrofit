@@ -33,7 +33,8 @@ public class MainActivity extends AppCompatActivity {
 
         jsonPlaceHolderAPI = retrofit.create(JsonPlaceHolderAPI.class);
         //getPost();
-        getComments();
+        //getComments();
+        createPost();
     }
 
     private void getPost() {
@@ -104,6 +105,38 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<Comments>> call, Throwable t) {
+                tvResult.setText(t.getMessage());
+            }
+        });
+    }
+    private void createPost(){
+        Post post = new Post(22 , "New Title" , "New Text");
+        Map<String , String> fields = new HashMap<>();
+        fields.put("userId" , "25");
+        fields.put("title" , "New Title");
+        //we pass value directly because we used @FromUrlEncoded with @Field
+        Call<Post> call = jsonPlaceHolderAPI.createPost(fields);
+        call.enqueue(new Callback<Post>() {
+            @Override
+            public void onResponse(Call<Post> call, Response<Post> response) {
+                if (!response.isSuccessful()){
+                    tvResult.setText("code: " + response.code());
+                    return;
+                }
+
+                Post postResponse = response.body();
+
+                String content = "";
+                content += "Code:" + response.code() + "\n";
+                content += "id: " + postResponse.getId() + "\n";
+                content += "UserId: " + postResponse.getUserId() + "\n";
+                content += "title: " + postResponse.getTitle() + "\n";
+                content += "text: " + postResponse.getText() + "\n\n";
+                tvResult.setText(content);
+            }
+
+            @Override
+            public void onFailure(Call<Post> call, Throwable t) {
                 tvResult.setText(t.getMessage());
             }
         });

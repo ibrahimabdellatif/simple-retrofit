@@ -4,7 +4,12 @@ import java.util.List;
 import java.util.Map;
 
 import retrofit2.Call;
+import retrofit2.http.Body;
+import retrofit2.http.Field;
+import retrofit2.http.FieldMap;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
@@ -45,11 +50,28 @@ public interface JsonPlaceHolderAPI {
     );
 
     @GET("comments")
-    //we can use QueryMap instead of Query to pass more parameter
-    //map store in key and value (Map is interface)
-    Call<List<Comments>> getComments(@QueryMap Map<String , String> parameters);
+        //we can use QueryMap instead of Query to pass more parameter
+        //map store in key and value (Map is interface)
+    Call<List<Comments>> getComments(@QueryMap Map<String, String> parameters);
 
     //you can pass url of API directly
     @GET("comments")
     Call<List<Comments>> getComments(@Url String url);
+
+    @POST("posts")
+    Call<Post> createPost(@Body Post post);
+
+    //by using @FormUrlEncoded notation you can passed value in main activity directly without need object
+    @FormUrlEncoded
+    @POST("posts")
+    Call<Post> createPost(
+            @Field("userId") int userId,
+            @Field("title") String title,
+            @Field("body") String text
+    );
+
+    //@POST() in side this brackets it is end point of API so must be added
+    @FormUrlEncoded
+    @POST("posts")
+    Call<Post> createPost(@FieldMap Map<String , String> fields);
 }

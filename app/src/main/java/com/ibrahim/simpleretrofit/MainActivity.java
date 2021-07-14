@@ -34,7 +34,9 @@ public class MainActivity extends AppCompatActivity {
         jsonPlaceHolderAPI = retrofit.create(JsonPlaceHolderAPI.class);
         //getPost();
         //getComments();
-        createPost();
+        //createPost();
+        //updatePost();
+        deletePost();
     }
 
     private void getPost() {
@@ -109,21 +111,21 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-    private void createPost(){
-        Post post = new Post(22 , "New Title" , "New Text");
-        Map<String , String> fields = new HashMap<>();
-        fields.put("userId" , "25");
-        fields.put("title" , "New Title");
+
+    private void createPost() {
+        Post post = new Post(22, "New Title", "New Text");
+        Map<String, String> fields = new HashMap<>();
+        fields.put("userId", "25");
+        fields.put("title", "New Title");
         //we pass value directly because we used @FromUrlEncoded with @Field
         Call<Post> call = jsonPlaceHolderAPI.createPost(fields);
         call.enqueue(new Callback<Post>() {
             @Override
             public void onResponse(Call<Post> call, Response<Post> response) {
-                if (!response.isSuccessful()){
+                if (!response.isSuccessful()) {
                     tvResult.setText("code: " + response.code());
                     return;
                 }
-
                 Post postResponse = response.body();
 
                 String content = "";
@@ -137,6 +139,49 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<Post> call, Throwable t) {
+                tvResult.setText(t.getMessage());
+                //
+            }
+        });
+    }
+
+    private void updatePost() {
+        Post post = new Post(12, null, "New Text");
+        Call<Post> call = jsonPlaceHolderAPI.patchPost(5, post);
+        call.enqueue(new Callback<Post>() {
+            @Override
+            public void onResponse(Call<Post> call, Response<Post> response) {
+                if (!response.isSuccessful()) {
+                    tvResult.setText("code: " + response.code());
+                    return;
+                }
+                Post postResponse = response.body();
+
+                String content = "";
+                content += "Code:" + response.code() + "\n";
+                content += "id: " + postResponse.getId() + "\n";
+                content += "UserId: " + postResponse.getUserId() + "\n";
+                content += "title: " + postResponse.getTitle() + "\n";
+                content += "text: " + postResponse.getText() + "\n\n";
+                tvResult.setText(content);
+            }
+
+            @Override
+            public void onFailure(Call<Post> call, Throwable t) {
+                tvResult.setText(t.getMessage());
+            }
+        });
+    }
+    private void deletePost(){
+        Call<Void> call = jsonPlaceHolderAPI.deletePost(5);
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                tvResult.setText("code: " + response.code());
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
                 tvResult.setText(t.getMessage());
             }
         });
